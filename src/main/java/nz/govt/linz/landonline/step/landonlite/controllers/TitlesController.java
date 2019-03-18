@@ -1,6 +1,7 @@
 package nz.govt.linz.landonline.step.landonlite.controllers;
 
 import nz.govt.linz.landonline.step.landonlite.models.Title;
+import nz.govt.linz.landonline.step.landonlite.models.TitleJournal;
 import nz.govt.linz.landonline.step.landonlite.repositories.TitleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,7 @@ public class TitlesController {
     public ResponseEntity<Title> updateTitle(@PathVariable long id, @RequestBody Title body) {
         Title result = titleRepository.findById(id).get();
         result.setOwnerName(body.getOwnerName());
+        result.getJournal().add(new TitleJournal(result));
         titleRepository.save(result);
         return ResponseEntity.ok().body(result);
     }
