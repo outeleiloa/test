@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom"
 import { Table, Card, CardBody, Form, Input, Button } from "reactstrap";
+import ReactTable from "react-table";
+import "react-table/react-table.css";
 
 class TitlePage extends Component {
     constructor(props) {
@@ -57,6 +59,19 @@ class TitlePage extends Component {
     render() {
       var titleNo = this.props.match.params.titleNo;
       var title = this.state.data;
+      const columns = [{
+          Header: 'Title Identifier',
+          accessor: 'titleNumber'
+      },{
+          Header: 'Owner',
+          accessor: 'ownerName'
+      },{
+          Header: 'Description',
+          accessor: 'description'
+      },{
+          Header: 'Time',
+          accessor: 'time'
+      }]
       return (
         <div>
           <h3>Title #{titleNo}</h3>
@@ -88,7 +103,14 @@ class TitlePage extends Component {
                     </Form>
                 </CardBody>
             </Card>
-
+            <h4 style={{marginTop: "25px"}}>Title History</h4>
+            <ReactTable
+                data={title.journal}
+                columns={columns}
+                defaultPageSize = {3}
+                pageSizeOptions = {[3, 6, 12]}
+                className = "-striped -highlight"
+            />
           </div>}
         </div>
       );
