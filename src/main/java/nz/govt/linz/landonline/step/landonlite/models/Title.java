@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OrderBy;
 import javax.persistence.OneToMany;
 import java.util.HashSet;
 import java.util.Set;
@@ -24,6 +25,7 @@ public class Title {
 
     @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL},
             mappedBy = "title", orphanRemoval = true)
+    @OrderBy("id desc")
     private Set<TitleJournal> journal;
 
     public Title() {
