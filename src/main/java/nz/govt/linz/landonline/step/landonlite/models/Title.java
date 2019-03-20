@@ -71,6 +71,10 @@ public class Title {
         this.ownerName = ownerName;
     }
 
+    public void setJournal(Set<TitleJournal> journal) {
+        this.journal = journal;
+    }
+
     @Override
     public String toString() {
         return "Title{" +
