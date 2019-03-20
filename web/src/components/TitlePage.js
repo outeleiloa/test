@@ -10,22 +10,36 @@ class TitlePage extends Component {
       this.state = {
         data: undefined,
         ownerChangeValue: "",
+        descriptionChangeValue: "",
+        titleNumChangeValue: "",
       }
       this.loadTitle = this.loadTitle.bind(this);
       this.ownerNameHandleChange = this.ownerNameHandleChange.bind(this);
-      this.ownerNameHandleSubmit = this.ownerNameHandleSubmit.bind(this);
+      this.descriptionHandleChange = this.descriptionHandleChange.bind(this);
+      this.titleNumHandleChange = this.titleNumHandleChange.bind(this);
+      this.handleSubmit = this.handleSubmit.bind(this);
     }
     ownerNameHandleChange(event) {
       this.setState({ownerChangeValue: event.target.value});
     }
-    ownerNameHandleSubmit(event) {
+    descriptionHandleChange(event) {
+      this.setState({descriptionChangeValue: event.target.value});
+    }
+    titleNumHandleChange(event) {
+      this.setState({titleNumChangeValue: event.target.value});
+    }
+    handleSubmit(event) {
       event.preventDefault();
       fetch(`/api/titles/${this.state.data.id}`, {
           method: 'POST',
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ownerName: this.state.ownerChangeValue}),
+          body: JSON.stringify({
+              ownerName: this.state.ownerChangeValue,
+              description: this.state.descriptionChangeValue,
+              titleNumber: this.state.titleNumChangeValue,
+          }),
         })
         .then(res => res.json())
         .then(json => {
@@ -33,6 +47,8 @@ class TitlePage extends Component {
           this.setState({
             data: json,
             ownerChangeValue: '',
+            descriptionChangeValue: '',
+            titleNumChangeValue: '',
           })
         });
     }
@@ -60,7 +76,7 @@ class TitlePage extends Component {
       var titleNo = this.props.match.params.titleNo;
       var title = this.state.data;
       const columns = [{
-          Header: 'Title Identifier',
+          Header: 'Title Number',
           accessor: 'titleNumber'
       },{
           Header: 'Owner',
@@ -95,9 +111,14 @@ class TitlePage extends Component {
                 <CardBody>
                     <h4>Change Owner</h4>
                     <p>As a registered conveyancing lawyer, you may record a change of ownership of this title.</p>
-                    <Form inline onSubmit={this.ownerNameHandleSubmit}>
-                        <Input type="text" value={this.state.ownerChangeValue} onChange={this.ownerNameHandleChange} 
-                            placeholder="Enter the new owner name" style={{width: "400px"}}/>
+                    <p>You may also update the Title Description and Title Number.</p>
+                    <Form inline onSubmit={this.handleSubmit}>
+                        <Input type="text" value={this.state.ownerChangeValue} onChange={this.ownerNameHandleChange}
+                            placeholder="Enter the new owner name" style={{width: "320px"}}/>
+                        <Input type="text" value={this.state.descriptionChangeValue} onChange={this.descriptionHandleChange}
+                            placeholder="Title Description" style={{width: "760px"}}/>
+                        <Input type="text" value={this.state.titleNumChangeValue} onChange={this.titleNumHandleChange}
+                            placeholder="Title Number" style={{width: "120px"}}/>
                         &nbsp;
                         <Button color="primary" type="submit" value="Submit">Save</Button>
                     </Form>

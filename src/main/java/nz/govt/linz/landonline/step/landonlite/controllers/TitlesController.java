@@ -29,7 +29,18 @@ public class TitlesController {
     @PostMapping("/{id}")
     public ResponseEntity<Title> updateTitle(@PathVariable long id, @RequestBody Title body) {
         Title result = titleRepository.findById(id).get();
-        result.setOwnerName(body.getOwnerName());
+        String name = body.getOwnerName();
+        if (name != null && name.trim().length() > 0) {
+            result.setOwnerName(name);
+        }
+        String description = body.getDescription();
+        if (description != null && description.trim().length() > 0) {
+            result.setDescription(description);
+        }
+        String titleNumber = body.getTitleNumber();
+        if (titleNumber != null && titleNumber.trim().length() > 0) {
+            result.setTitleNumber(titleNumber);
+        }
         result.getJournal().add(new TitleJournal(result));
         titleRepository.save(result);
         // Although we do order journal entries by most recently created in
