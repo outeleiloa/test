@@ -10,10 +10,13 @@ class TitlePage extends Component {
       this.state = {
         data: undefined,
         ownerChangeValue: "",
+        descriptionChangeValue: "",
       }
       this.loadTitle = this.loadTitle.bind(this);
       this.ownerNameHandleChange = this.ownerNameHandleChange.bind(this);
       this.ownerNameHandleSubmit = this.ownerNameHandleSubmit.bind(this);
+      this.descriptionHandleChange = this.descriptionHandleChange.bind(this);
+      this.descriptionHandleSubmit = this.descriptionHandleSubmit.bind(this);
     }
     ownerNameHandleChange(event) {
       this.setState({ownerChangeValue: event.target.value});
@@ -33,6 +36,27 @@ class TitlePage extends Component {
           this.setState({
             data: json,
             ownerChangeValue: '',
+          })
+        });
+    }
+    descriptionHandleChange(event) {
+      this.setState({descriptionChangeValue: event.target.value});
+    }
+    descriptionHandleSubmit(event) {
+      event.preventDefault();
+      fetch(`/api/titles/${this.state.data.id}`, {
+          method: 'POST',
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({description: this.state.descriptionChangeValue}),
+        })
+        .then(res => res.json())
+        .then(json => {
+          console.log(json)
+          this.setState({
+            data: json,
+            descriptionChangeValue: '',
           })
         });
     }
@@ -98,6 +122,14 @@ class TitlePage extends Component {
                     <Form inline onSubmit={this.ownerNameHandleSubmit}>
                         <Input type="text" value={this.state.ownerChangeValue} onChange={this.ownerNameHandleChange} 
                             placeholder="Enter the new owner name" style={{width: "400px"}}/>
+                        &nbsp;
+                        <Button color="primary" type="submit" value="Submit">Save</Button>
+                    </Form>
+                    <h4 style={{marginTop: "10px"}}>Change Description</h4>
+                    <p>Update the Title Description (optional).</p>
+                    <Form inline onSubmit={this.descriptionHandleSubmit}>
+                        <Input type="text" value={this.state.descriptionChangeValue} onChange={this.descriptionHandleChange} 
+                            placeholder="Enter the new title description" style={{width: "400px"}}/>
                         &nbsp;
                         <Button color="primary" type="submit" value="Submit">Save</Button>
                     </Form>
