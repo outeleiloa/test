@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -22,8 +23,11 @@ public class TitlesController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Title> showTitle(@PathVariable long id) {
-        Optional<Title> title = titleRepository.findById(id);
-        return title.map(t -> ResponseEntity.ok().body(t)).orElse(NOT_FOUND);
+        List<Title> list = titleRepository.findByTitleNumber(String.valueOf(id));
+        if (list.isEmpty()) {
+            return NOT_FOUND;
+        }
+        return ResponseEntity.ok().body(list.get(0));
     }
 
     @PostMapping("/{id}")

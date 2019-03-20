@@ -68,7 +68,7 @@ class TitlePage extends Component {
     }
     componentDidUpdate(newProps) {
       var titleNo = this.props.match.params.titleNo;
-      if(this.state.data && this.state.data.id != titleNo) {
+      if(this.state.data && this.state.data.titleNumber != titleNo) {
         this.loadTitle();
       }
     }
@@ -90,11 +90,12 @@ class TitlePage extends Component {
       }]
       return (
         <div>
-          <h3>Title #{titleNo}</h3>
           {this.state.data === undefined && <p>
+          <h3>Title #{titleNo}</h3>
             Loading...
           </p>}
           {this.state.data && <div>
+          <h3>Title #{title.titleNumber}</h3>
             <Table>
                 <tbody>
                     <tr>
